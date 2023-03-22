@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sinatra-configmap
+data:
+  database: sinatra_project_production
+  postgres_username: postgres
+  postgres_password: postgres
+  database_url: postgres
+  rack_env: production
