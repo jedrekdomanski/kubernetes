@@ -1,14 +1,14 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: rails-db-migrate
+  name: rake-db-migrate
 spec:
   template:
     spec:
       containers:
       - name: sinatra
         command:
-        - rails
+        - rake
         - db:migrate
         image: domanskij/sinatra-api:latest
       restartPolicy: OnFailure
