@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rails-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rails-api
+  template:
+    metadata:
+      labels:
+        app: rails-api
+    spec:
+      containers:
+        - name: rails-api
+          image: domanskij/rails-api:latest
+          imagePullPolicy: "IfNotPresent"
+          ports:
+          - containerPort: 3000
+            name: http
+            protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /api/services/hello
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+          env:
+          - name: DATABASE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: rails-api-secret
+                key: postgres_username
+          - name: DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: rails-api-secret
+                key: postgres_password
+          - name: DATABASE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: rails-api-configmap
+                key: database_url
+          - name: RAILS_ENV
+            valueFrom:
+              configMapKeyRef:
+                name: rails-api-configmap
+                key: rails_env
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-volume
+      volumes:
+        - name: postgres-volume
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
