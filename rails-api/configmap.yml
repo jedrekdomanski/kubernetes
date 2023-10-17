@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rails-api-configmap
+data:
+  database: rails_api_project_production
+  postgres_username: postgres
+  postgres_password: postgres
+  database_url: postgres
+  rails_env: production

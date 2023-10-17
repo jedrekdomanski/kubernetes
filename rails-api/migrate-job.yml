@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rails-db-migrate
+spec:
+  template:
+    spec:
+      containers:
+      - name: rails-api
+        command:
+        - rails
+        - db:migrate
+        image: domanskij/rails-api:latest
+      restartPolicy: OnFailure
